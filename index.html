@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskFlow — Gestor de Tareas</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="app-title">TaskFlow</h1>
+          <p class="app-subtitle">Organiza tu día con claridad y eficiencia</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="icon-btn" title="Cambiar tema (Claro/Oscuro)" aria-label="Cambiar tema">
+          <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Stats & Progress Card -->
+    <section class="stats-card">
+      <div class="stats-header">
+        <div>
+          <span class="stats-title">Progreso general</span>
+          <p class="stats-count" id="statsCountText">0 de 0 tareas completadas</p>
+        </div>
+        <div class="percentage-badge" id="percentageBadge">0%</div>
+      </div>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+      </div>
+      <div class="stats-pills">
+        <div class="stat-pill">
+          <span class="stat-pill-label">Total:</span>
+          <span class="stat-pill-value" id="totalTasksCount">0</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill-label">Pendientes:</span>
+          <span class="stat-pill-value pending" id="pendingTasksCount">0</span>
+        </div>
+        <div class="stat-pill">
+          <span class="stat-pill-label">Completadas:</span>
+          <span class="stat-pill-value completed" id="completedTasksCount">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task Creation Card -->
+    <section class="card form-card">
+      <form id="taskForm">
+        <div class="input-group">
+          <input 
+            type="text" 
+            id="taskTitleInput" 
+            placeholder="¿Qué necesitas hacer hoy?" 
+            autocomplete="off" 
+            required
+            maxlength="120"
+          >
+          <button type="submit" class="btn btn-primary" id="addTaskBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Agregar tarea</span>
+          </button>
+        </div>
+
+        <!-- Optional Details Toggle / Row -->
+        <div class="form-row-details">
+          <div class="form-control">
+            <label for="taskCategoryInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                <line x1="7" y1="7" x2="7.01" y2="7"></line>
+              </svg>
+              Categoría
+            </label>
+            <select id="taskCategoryInput">
+              <option value="Trabajo">💼 Trabajo</option>
+              <option value="Personal" selected>👤 Personal</option>
+              <option value="Estudio">📚 Estudio</option>
+              <option value="Salud">❤️ Salud</option>
+              <option value="Hogar">🏡 Hogar</option>
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label for="taskPriorityInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+                <line x1="4" y1="22" x2="4" y2="15"></line>
+              </svg>
+              Prioridad
+            </label>
+            <select id="taskPriorityInput">
+              <option value="baja">🟢 Baja</option>
+              <option value="media" selected>🟡 Media</option>
+              <option value="alta">🔴 Alta</option>
+            </select>
+          </div>
+
+          <div class="form-control">
+            <label for="taskDueDateInput">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              Fecha límite
+            </label>
+            <input type="date" id="taskDueDateInput">
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- Controls: Search & Filters -->
+    <section class="controls-section">
+      <!-- Search Input -->
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Buscar tareas...">
+        <button id="clearSearchBtn" class="clear-search-btn" title="Limpiar búsqueda" aria-label="Limpiar búsqueda" style="display: none;">
+          &times;
+        </button>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">Todas</button>
+        <button class="filter-tab" data-filter="pending">Pendientes</button>
+        <button class="filter-tab" data-filter="completed">Completadas</button>
+      </div>
+    </section>
+
+    <!-- Task List -->
+    <main class="tasks-wrapper">
+      <div class="tasks-header-bar">
+        <h2 class="section-title" id="listHeading">Mis Tareas</h2>
+        <button id="clearCompletedBtn" class="btn btn-ghost" title="Eliminar todas las completadas">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Limpiar completadas</span>
+        </button>
+      </div>
+
+      <ul class="task-list" id="taskList" role="list">
+        <!-- Rendered dynamically by app.js -->
+      </ul>
+
+      <!-- Empty State -->
+      <div class="empty-state" id="emptyState" style="display: none;">
+        <div class="empty-illustration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M9 11l3 3L22 4"></path>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+          </svg>
+        </div>
+        <h3 id="emptyStateTitle">No hay tareas</h3>
+        <p id="emptyStateSubtitle">¡Tu lista está limpia! Agrega una nueva tarea arriba para comenzar.</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit Task Modal -->
+  <div class="modal-overlay" id="editModalOverlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h3 id="modalTitle">Editar tarea</h3>
+        <button class="icon-btn close-modal-btn" id="closeModalBtn" aria-label="Cerrar modal">&times;</button>
+      </div>
+      <form id="editTaskForm">
+        <input type="hidden" id="editTaskId">
+        
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editTaskTitle">Título de la tarea</label>
+            <input type="text" id="editTaskTitle" required maxlength="120">
+          </div>
+
+          <div class="form-grid-modal">
+            <div class="form-group">
+              <label for="editTaskCategory">Categoría</label>
+              <select id="editTaskCategory">
+                <option value="Trabajo">💼 Trabajo</option>
+                <option value="Personal">👤 Personal</option>
+                <option value="Estudio">📚 Estudio</option>
+                <option value="Salud">❤️ Salud</option>
+                <option value="Hogar">🏡 Hogar</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="editTaskPriority">Prioridad</label>
+              <select id="editTaskPriority">
+                <option value="baja">🟢 Baja</option>
+                <option value="media">🟡 Media</option>
+                <option value="alta">🔴 Alta</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editTaskDueDate">Fecha límite</label>
+            <input type="date" id="editTaskDueDate">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
